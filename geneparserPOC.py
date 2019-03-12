@@ -1,4 +1,5 @@
 import itertools
+import csv
 
 filename = str(input("filename:"))
 
@@ -128,3 +129,25 @@ print("Gene count table")
 print(genetable)
 print("Total gene counts")
 print(genecounts)
+
+
+
+
+def csvformat():
+    for i in genetable.keys():
+        keys = [*genetable[i].keys()]
+        for j, s in enumerate(keys):
+            row = []
+            row.append(keys[j].split(' ')[0])
+            row.append(keys[j].split(' ')[1])
+            row.append(genetable[i][s])
+            csvdata.append(row)
+csvformat()
+
+def csvwriter():
+    with open('genetable.csv', 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvdata)
+    csvFile.close()
+
+csvwriter()
