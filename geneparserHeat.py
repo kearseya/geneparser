@@ -1,5 +1,5 @@
 import itertools
-import csv
+#import csv
 import operator
 
 import numpy as np
@@ -38,7 +38,6 @@ initkrange(mink, maxk)
 def initall():
     for k in krange:
         all[k] = [''.join(c) for c in itertools.product(DNAbases, repeat=k)]
-        print(all)
 initall()
 
 
@@ -70,19 +69,27 @@ def geneparser():
                 for x in range(0, genomesize-k):
                     kmer = genome[x:x+k]
                     if kmer == s:
+                        #print(kmer)
                         for j in range(1, round(maxgl/k)):
                             nkmer = genome[x+(j*k):x+((j+1)*k)]
-                            if nkmer in all and not [s, e]:
-                                continue
-                            if nkmer == e and (j*k) > mingl:
-                                genes += 1
-                                genetable[k][kmer+" "+nkmer] += 1
+                            if nkmer in all[k]:
+                                if nkmer not in [s, e]:
+                                    #print("N "+nkmer)
+                                    continue
+                                if nkmer == e:
+                                    if j*k >= mingl:
+                                        #print("E "+nkmer)
+                                        genes += 1
+                                        genetable[k][kmer+" "+nkmer] += 1
+                                        #print(genetable[k][kmer+" "+nkmer])
+                                        break
+                                if nkmer == s:
+                                    #print("Restart")
+                                    break
+                            if nkmer not in all[k]:
+                                #print("Invalid")
                                 break
-                            if nkmer == s:
-                                break
-                            if nkmer not in all:
-                                break
-            genecounts[k] = genes
+        genecounts[k] = genes
 geneparser()
 
 print(genecounts)
@@ -112,10 +119,7 @@ def heatstruct():
             heatarrays[k].append(row)
 heatstruct()
 
-print(heatarrays)
-
-
-
+#print(heatarrays)
 
 
 
